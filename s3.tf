@@ -34,6 +34,44 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "root" {
   }
 }
 
+
+data "aws_iam_policy_document" "root_bucket_policy" {
+  statement {
+    sid    = "GrantDatabricksAccess"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::414351767826:root"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:PutObject",
+      "s3:DeleteObject",
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
+
+    resources = [
+      aws_s3_bucket.root.arn,
+      "${aws_s3_bucket.root.arn}/*",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:PrincipalTag/DatabricksAccountId"
+      values   = [var.databricks_account_id]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "root" {
+  bucket = aws_s3_bucket.root.id
+  policy = data.aws_iam_policy_document.root_bucket_policy.json
+}
+
 # This bucket is only created if var.create_metastore_bucket is true.
 resource "aws_s3_bucket" "metastore" {
   count  = var.create_metastore ? 1 : 0
