@@ -1,2 +1,0 @@
-provider "databricks" {}
-provider "aws" {}
