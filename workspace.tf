@@ -6,7 +6,6 @@ locals {
 
 # 1. Credentials for the cross-account role
 resource "databricks_mws_credentials" "this" {
-  account_id       = var.databricks_account_id
   credentials_name = "${local.prefix}-creds"
   role_arn         = aws_iam_role.databricks_workspace_role.arn
 }
@@ -51,8 +50,6 @@ resource "databricks_metastore" "this" {
 
 # This resource is only created if a metastore is being created OR an existing one is provided.
 resource "databricks_metastore_assignment" "this" {
-  count = local.assigned_metastore_id != null ? 1 : 0
-
   metastore_id = local.assigned_metastore_id
   workspace_id = databricks_mws_workspaces.this.workspace_id
 }

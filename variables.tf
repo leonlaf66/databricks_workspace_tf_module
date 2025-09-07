@@ -11,11 +11,6 @@ variable "aws_region" {
 }
 
 ###network
-variable "vpc_id" {
-  description = "VPC ID where Databricks subnets will be created"
-  type        = string
-}
-
 variable "availability_zones" {
   description = "List of availability zones for the subnets"
   type        = list(string)
