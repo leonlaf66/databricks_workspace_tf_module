@@ -6,7 +6,6 @@ locals {
 
 # 1. Credentials for the cross-account role
 resource "databricks_mws_credentials" "this" {
-  account_id       = var.databricks_account_id
   credentials_name = "${local.prefix}-creds"
   role_arn         = aws_iam_role.databricks_workspace_role.arn
 }
