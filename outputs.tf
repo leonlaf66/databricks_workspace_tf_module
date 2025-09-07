@@ -12,8 +12,3 @@ output "cross_account_role_arn" {
   description = "ARN of the cross-account role created for Databricks."
   value       = aws_iam_role.databricks_workspace_role.arn
 }
-
-output "instance_profile_arn" {
-  description = "ARN of the instance profile for Databricks clusters."
-  value       = aws_iam_instance_profile.instance_profile.arn
-}
